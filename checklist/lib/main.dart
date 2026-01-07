@@ -1,7 +1,18 @@
+import 'package:checklist/features/testui/submit.dart';
+import 'package:checklist/home.dart';
 import 'package:flutter/material.dart';
+import 'package:checklist/features/auth/data/repository/user_repo.dart';
+import 'package:checklist/features/product/data/repositry/product_repo.dart';
 
 void main() {
-  runApp(const MyApp());
+  final ProductRepository productRepository = ProductRepository();
+  final UsersRepository usersRepository = UsersRepository();
+  runApp(
+    HomePage(
+      productRepository: productRepository,
+      usersRepository: usersRepository,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +41,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: DocLogin(), //MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
