@@ -18,6 +18,10 @@ class Odersview extends StatelessWidget {
           future: orderRepositry.getOrders(),
           builder: (context, asyncSnapshot) {
             final orders = asyncSnapshot.data ?? [];
+            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: const CircularProgressIndicator());
+            }
+
             if (asyncSnapshot.hasError) {
               return Center(child: Text("حدث خطأ: ${asyncSnapshot.error}"));
             }
@@ -29,14 +33,19 @@ class Odersview extends StatelessWidget {
                   Text(orderRepositry.orders.length.toString()),
                   Center(
                     child: SizedBox(
-                      width: 400,
+                      width: 600,
                       height: 400,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: DataTable(
                           columns: [
                             DataColumn(label: Text("الرقم")),
-                            DataColumn(label: Text("معرف المستخدم")),
+                            DataColumn(
+                              label: FittedBox(
+                                fit: .fitWidth,
+                                child: Text("معرف "),
+                              ),
+                            ),
                             DataColumn(label: Text("المنتج")),
                             DataColumn(label: Text("تاريخ الطلبية")),
                           ],
