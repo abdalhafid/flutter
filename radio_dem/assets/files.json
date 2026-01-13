@@ -1,0 +1,14 @@
+[
+  {
+    "fileurl": "https://example.com/file1.jpg",
+    "filename": "file1.jpg",
+    "filesize": 1024,
+    "filetype": "jpg"
+  },
+  {
+    "fileurl": "https://example.com/file2.dcm",
+    "filename": "file2.dcm",
+    "filesize": 2048,
+    "filetype": "dicom"
+  }
+]
