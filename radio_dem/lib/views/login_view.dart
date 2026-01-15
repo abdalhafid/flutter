@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../services/mimic_api.dart';
-import 'radio_exams_view.dart';
+import 'package:radio_dem/data_provider/data_provider.dart';
+import 'package:radio_dem/models/user.dart';
+import 'package:radio_dem/views/exams_view.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -10,23 +11,35 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  String error = '';
+  final _dataProvider = DataProvider();
+  bool _loading = false;
 
   void _login() async {
-    final user = await MimicApi.login(
-      _usernameController.text,
-      _passwordController.text,
-    );
-    if (user != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => RadioExamsView()),
+    setState(() => _loading = true);
+
+    try {
+      User? user = await _dataProvider.login(
+        _usernameController.text,
+        _passwordController.text,
       );
-    } else {
-      setState(() {
-        error = 'Invalid credentials';
-      });
+
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => ExamsView(manipUser: user)),
+        );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Invalid credentials')));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
+
+    setState(() => _loading = false);
   }
 
   @override
@@ -46,11 +59,12 @@ class _LoginViewState extends State<LoginView> {
               decoration: InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            SizedBox(height: 10),
-            ElevatedButton(onPressed: _login, child: Text('Login')),
-            TextButton(onPressed: () {}, child: Text('Forgot Password?')),
-            if (error.isNotEmpty)
-              Text(error, style: TextStyle(color: Colors.red)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _loading ? null : _login,
+              child: Text('Login'),
+            ),
+            TextButton(onPressed: () {}, child: Text('Forgot Password')),
           ],
         ),
       ),

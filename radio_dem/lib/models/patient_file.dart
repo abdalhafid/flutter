@@ -11,12 +11,10 @@ class PatientFile {
     required this.fileType,
   });
 
-  factory PatientFile.fromJson(Map<String, dynamic> json) {
-    return PatientFile(
-      fileUrl: json['fileurl'],
-      fileName: json['filename'],
-      fileSize: json['filesize'],
-      fileType: json['filetype'],
-    );
-  }
+  factory PatientFile.fromJson(Map<String, dynamic> json) => PatientFile(
+    fileUrl: json['fileurl'],
+    fileName: json['filename'],
+    fileSize: json['filesize'],
+    fileType: json['filetype'],
+  );
 }
